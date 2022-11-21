@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import { CartItem } from "../../types/CartItem";
 import { Product } from "../../types/Product";
+import { api } from "../../utils/api";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { Button } from "../Button";
 import { MinusCircle } from "../Icons/MinusCircle";
@@ -15,6 +16,7 @@ interface CartProps {
      onAdd: (product: Product) => void;
      onDecrement: (product: Product) => void;
      onConfirmOrder: () => void;
+     selectedTable: string;
 }
 
 export function Cart(props: CartProps) {
@@ -25,7 +27,17 @@ export function Cart(props: CartProps) {
           return acc + cartItem.quantity * cartItem.product.price;
      }, 0);
 
-     function handleConfirmOrder() {
+     async function handleConfirmOrder() {
+          setLoading(true);
+          const payload = {
+               table: props.selectedTable,
+               products: props.cartItems.map((cartItem) => ({
+                    product: cartItem.product._id,
+                    quantity: cartItem.quantity
+               }))
+          };
+          await api.post('/orders', payload);
+          setLoading(false);
           setIsModalVisible(true);
      };
 
@@ -51,7 +63,7 @@ export function Cart(props: CartProps) {
                                    <ProductContainer>
                                         <Image
                                              source={{
-                                                  uri: `http://192.168.0.21:7000/uploads/${cartItem.product.imagePath}`
+                                                  uri: `http://192.168.0.120:7000/uploads/${cartItem.product.imagePath}`
                                              }}
                                         />
                                         <QuantityContainer>

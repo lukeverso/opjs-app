@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList } from "react-native";
-import { products } from "../../mocks/products";
 import { Product } from "../../types/Product";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { PlusCircle } from "../Icons/PlusCircle";
@@ -31,7 +30,7 @@ export function Menu(props: MenuProps) {
                     onAddToCart={props.onAddToCart}
                />
                <FlatList
-                    data={products}
+                    data={props.products}
                     style={{ marginTop: 32 }}
                     contentContainerStyle={{ paddingHorizontal: 24 }}
                     keyExtractor={product => product._id}
@@ -40,7 +39,7 @@ export function Menu(props: MenuProps) {
                          <ProductContainer onPress={() => handleOpenModal(product)}>
                               <ProductImage
                                    source={{
-                                        uri: `http://192.168.0.21:7000/uploads/${product.imagePath}`,
+                                        uri: `http://192.168.0.120:7000/uploads/${product.imagePath}`,
                                    }}
                               />
                               <ProductDetails>
